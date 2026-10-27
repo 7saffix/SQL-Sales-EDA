@@ -7,16 +7,11 @@ Purpose:
     - To identify top performers or laggards.
 
 SQL Functions Used:
-    - Window Ranking Functions: RANK(), DENSE_RANK(), ROW_NUMBER(), TOP
     - Clauses: GROUP BY, ORDER BY
 
 */
-SELECT * FROM products;
-SELECT * FROM sales;
-SELECT * FROM customers;
 
 -- Which 5 products Generating the Highest Revenue?
--- Simple Ranking
 SELECT 
 p.product_name,
 SUM(s.sales_amount) as product_revenue
@@ -42,22 +37,24 @@ LIMIT 5;
 -- Find the top 10 customers who have generated the highest revenue
 SELECT 
 c.first_name,
+c.customer_key,
 SUM(s.sales_amount) as revenue_per_customer
 FROM sales s
 JOIN customers c
 ON s.customer_key = c.customer_key
-GROUP BY first_name
+GROUP BY c.first_name,c.customer_key
 ORDER BY revenue_per_customer DESC
 LIMIT 10;
 
--- The 10 customers with the fewest orders placed
+-- customers with the fewest orders placed
 SELECT 
 c.first_name,
-SUM(s.sales_amount) as revenue_per_customer
+c.customer_key,
+COUNT(DISTINCT order_number) as fewest_orders
 FROM sales s
 JOIN customers c
 ON s.customer_key = c.customer_key
-GROUP BY first_name
-ORDER BY revenue_per_customer
-LIMIT 10;
+GROUP BY c.first_name,c.customer_key
+ORDER BY fewest_orders;
+
 
