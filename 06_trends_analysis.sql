@@ -12,8 +12,6 @@ SQL Functions Used:
 */
 
 -- Analyse sales performance over time
-SELECT * FROM sales;
-
 -- Yearly sales analysis
 SELECT 
 EXTRACT(YEAR FROM order_date) as revenue_year,
@@ -25,6 +23,8 @@ WHERE order_date is NOT NULL
 GROUP BY EXTRACT(YEAR FROM order_date)
 ORDER BY EXTRACT(YEAR FROM order_date);
 
+
+
 --Monthly sales analysis
 SELECT 
 date_trunc('month',order_date)::date as sales_month,
@@ -35,6 +35,7 @@ from sales
 WHERE order_date is NOT NULL
 GROUP BY date_trunc('month',order_date)
 ORDER BY sales_month;
+
 
 --Quarterly sales analysis
 SELECT
@@ -48,7 +49,7 @@ GROUP BY DATE_TRUNC('quarter', order_date)
 ORDER BY sales_quarter;
 
 
---year-over-year (YoY) sales growth — how much sales increased or decreased compared with the previous year.
+--Year-over-Year (YoY) sales growth — how much sales increased or decreased compared with the previous year.
 WITH yearly_sales AS (
     SELECT
         EXTRACT(YEAR FROM order_date)::int AS sales_year,
@@ -68,4 +69,46 @@ SELECT
     ) AS yoy_growth_percentage
 FROM yearly_sales
 ORDER BY sales_year;
+
+
+--running total sales over time
+SELECT sales_year,
+total_sales,
+SUM(total_sales) OVER(ORDER BY sales_year) AS running_sales
+FROM 
+(SELECT 
+EXTRACT(YEAR FROM order_date) AS sales_year,
+SUM(sales_amount) AS total_sales
+FROM sales
+WHERE order_date IS NOT NULL
+GROUP BY EXTRACT(YEAR FROM order_date))
+ORDER BY sales_year;
+
+/*
+Cumulative Analysis
+
+Purpose:
+    - To calculate running totals or moving averages for key metrics.
+    - To track performance over time cumulatively.
+    - Useful for growth analysis or identifying long-term trends.
+
+SQL Functions Used:
+    - Window Functions: SUM() OVER(), AVG() OVER()
+
+*/
+
+--running total sales over time
+SELECT sales_year,
+total_sales,
+SUM(total_sales) OVER(ORDER BY sales_year) AS running_sales
+FROM 
+(SELECT 
+EXTRACT(YEAR FROM order_date) AS sales_year,
+SUM(sales_amount) AS total_sales,
+AVG(price)      AS avg_price
+FROM sales
+WHERE order_date IS NOT NULL
+GROUP BY EXTRACT(YEAR FROM order_date))
+ORDER BY sales_year;
+
 
