@@ -66,7 +66,7 @@ SELECT
         100.0 * (total_sales - LAG(total_sales) OVER (ORDER BY sales_year))
         / NULLIF(LAG(total_sales) OVER (ORDER BY sales_year), 0),
         2
-    ) AS yoy_growth_percentage
+    ) :: text || '%' AS yoy_growth_percentage
 FROM yearly_sales
 ORDER BY sales_year;
 
