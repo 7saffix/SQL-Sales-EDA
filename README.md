@@ -1,133 +1,142 @@
-# SQL Sales Exploratory Data Analysis (EDA)
+# Sales Performance Analysis & Business Reporting
 
-## Project Overview
+Project Overview
 
-This project focuses on performing Exploratory Data Analysis (EDA) using SQL to understand sales data, explore customer and product information, and identify key business metrics and performance patterns.
+This project focuses on analyzing sales data to evaluate business performance, understand customer purchasing behavior, and identify product and revenue trends.
 
-The project uses three datasets: **customers, products, and sales**. PostgreSQL is used to explore the database structure, examine data distributions, calculate business metrics, and analyze sales performance across different dimensions.
+Using sales, customer, and product datasets, the project follows an end-to-end analytical workflow, including data exploration, SQL-based analysis, business reporting, and interactive dashboard development.
 
-## Objectives
+PostgreSQL is used to perform the data analysis and generate customer and product reporting views. The project will also incorporate a Power BI or Excel dashboard to present key performance indicators, trends, and business insights in an interactive and accessible format.
 
-- Explore database tables, schemas, columns, and data ranges.
-- Understand customer demographics and product categories.
-- Calculate key business metrics, including total revenue, quantity sold, and average price.
-- Analyze sales performance across countries, product categories, and customers.
-- Identify top-performing and low-performing products.
-- Rank customers based on revenue generation.
-- Practice SQL techniques commonly used in data analysis and business reporting.
+The objective is to turn raw business data into meaningful insights that can help stakeholders understand performance and make informed decisions.
 
-## Dataset
+## Business Objectives
 
-The project contains three tables:
+- Explore and understand the structure of a relational sales database.
+- Analyze overall sales performance and trends over time.
+- Identify top-performing products and product categories.
+- Evaluate product performance across different years.
+- Understand customer purchasing behavior and segment customers.
+- Analyze the contribution of different product categories and countries to total revenue.
+- Create reusable customer and product reporting views with business KPIs.
 
-| Table | Description |
+## Dataset Overview
+
+The project uses three datasets:
+
+| Dataset | Description |
 |---|---|
-| `customers` | Customer information, including country, gender, and customer identifiers. |
+| `sales` | Transaction-level information, including order dates, customers, products, quantities, and sales amounts. |
+| `customers` | Customer information, including names, country, gender, and birthdate. |
 | `products` | Product information, including product names, categories, subcategories, and costs. |
-| `sales` | Sales transaction data, including order numbers, product and customer identifiers, quantities, prices, and sales amounts. |
 
-The tables are connected through shared identifiers, allowing customer and product information to be analyzed alongside sales transactions.
+### Dataset Statistics
 
-## Tools and Technologies
+| Metric | Value |
+|---|---:|
+| Total sales records | 60,398 |
+| Unique customers | 18,484 |
+| Unique products | 295 |
+| Countries represented | 6 |
+| Total recorded sales | 29,356,250 |
+| Sales date range | December 29, 2010 – January 28, 2014 |
+
+## Tools & Technologies
 
 - **Database:** PostgreSQL
-- **Language:** SQL
-- **Version Control:** Git and GitHub
-
-## Analysis Performed
-
-### 1. Database Exploration
-
-Explored the database structure and inspected the available tables and columns.
-
-- Retrieved table information from `information_schema.tables`.
-- Examined column details using `information_schema.columns`.
-- Inspected sample records from the customers, products, and sales tables.
-- Reviewed column names and data types.
-
-**SQL concepts:** `information_schema`, `SELECT`, `LIMIT`
-
-### 2. Dimensions Exploration
-
-Explored the unique values and date range within the datasets.
-
-- Identified unique customer countries.
-- Explored unique combinations of product categories, subcategories, and product names.
-- Identified the earliest and latest order dates.
-- Calculated the time interval covered by the sales data.
-
-**SQL concepts:** `DISTINCT`, `ORDER BY`, `MIN()`, `MAX()`, `AGE()`
-
-### 3. Measures Exploration
-
-Calculated key business metrics to understand overall business performance.
-
-- Total sales revenue.
-- Total quantity sold.
-- Average selling price.
-- Total number of distinct orders.
-- Total number of product records.
-- Total number of customer records.
-- Number of distinct customers who placed orders.
-- Consolidated key metrics into a single report using `UNION ALL`.
-
-**SQL concepts:** `SUM()`, `AVG()`, `ROUND()`, `COUNT()`, `COUNT(DISTINCT)`, `UNION ALL`
-
-### 4. Magnitude Analysis
-
-Analyzed the distribution of customers, products, and revenue across different business dimensions.
-
-- Customer distribution by country.
-- Customer distribution by gender.
-- Product count by category.
-- Average product cost by category.
-- Revenue generated by each product category.
-- Revenue generated by individual customers.
-- Revenue distribution across countries.
-
-**SQL concepts:** `GROUP BY`, aggregate functions, `JOIN`, `ORDER BY`
-
-### 5. Ranking Analysis
-
-Compared product and customer performance to identify high and low performers.
-
-- Top five products by revenue.
-- Five lowest-revenue products.
-- Top ten customers by revenue.
-- Ten customers with the lowest revenue, as an initial exploration of lower-performing customers.
-
-**SQL concepts:** `JOIN`, `SUM()`, `GROUP BY`, `ORDER BY`, `LIMIT`
-
-## Key SQL Skills Demonstrated
-
-This project demonstrates practical use of:
-
-- Database and schema exploration.
-- Data aggregation and summarization.
-- Grouping and sorting data.
-- Working with dates and time intervals.
-- Joining relational tables.
-- Calculating business metrics.
-- Ranking products and customers.
-- Combining multiple metric queries into a consolidated report.
+- **Query Language:** SQL
+- **Version Control:** Git & GitHub
 
 
-## How to Run the Project
+## Key Analysis Performed
 
-1. Install PostgreSQL and open a SQL client such as pgAdmin or VS Code with a PostgreSQL extension.
-2. Create a database for the project.
-3. Import the three CSV datasets into the corresponding tables: `customers`, `products`, and `sales`.
-4. Verify that the column names and data types match the SQL queries.
-5. Open the SQL script and execute the queries section by section.
-6. Review the query outputs to understand the data and identify business patterns.
+### 1. Sales Trend Analysis
+- Analyzed sales performance across yearly, quarterly, and monthly periods.
+- Used `EXTRACT()` and `DATE_TRUNC()` to aggregate sales over time.
+- Applied `LAG()` to compare sales with previous periods and calculate year-over-year growth.
+
+### 2. Cumulative Sales Analysis
+- Calculated running total sales using window functions.
+- Examined how sales accumulated over time.
+
+### 3. Product & Category Performance
+- Compared product sales across different years.
+- Identified high-performing and low-performing products based on revenue.
+- Used `LAG()` to evaluate year-over-year product and category performance.
+- Applied `DENSE_RANK()` to rank products based on revenue.
+
+### 4. Part-to-Whole Analysis
+- Calculated the percentage contribution of each product category to total sales.
+- Evaluated the contribution of different countries to overall sales.
+- Used window functions to calculate revenue distribution.
+
+### 5. Customer & Product Segmentation
+- Grouped customers based on purchasing behavior, total sales, and customer lifespan.
+- Classified customers into VIP, Regular, and New segments using defined business rules.
+- Categorized products into High Performer, Mid Range, and Low Range based on revenue thresholds.
+
+## Key Findings
+
+The analysis of 60,398 sales records revealed several business patterns:
+
+- **Overall Sales:** Total recorded sales amounted to 29.36 million across the analyzed period.
+- **Annual Performance:** 2013 generated the highest annual sales, reaching 16.34 million.
+- **Category Contribution:** Bikes accounted for 96.46% of total sales, indicating a strong concentration of revenue within this category.
+- **Top-Performing Product:** Mountain-200 Black-46 generated 1.37 million in sales, contributing approximately 4.68% of total revenue.
+- **Customer Distribution:** The USA represented 31.21% of the customer base, making it the largest customer market among the six countries analyzed.
+
+
+## Customer & Product Reporting
+
+To consolidate the analysis into reusable reporting outputs, I created two SQL views.
+
+### Customer Report — `customers_report`
+
+Provides a customer-level overview with:
+
+- Customer name and age
+- Age group classification
+- Customer segmentation (VIP, Regular, New)
+- Total orders
+- Total sales
+- Total quantity purchased
+- Number of distinct products purchased
+- Customer lifespan in months
+- Last order date
+- Average order value
+- Average monthly spend
+
+### Product Report — `products_report`
+
+Provides a product-level overview with:
+
+- Product name, category, and cost
+- Product performance classification
+- Total orders
+- Total sales
+- Total quantity sold
+- Product lifespan in months
+- Last sale date
+- Average selling price
+- Average order revenue
+- Average monthly revenue
+
+These views provide structured datasets for further business analysis and reporting.
+
+## Project Outcome
+
+This project provided practical experience in applying PostgreSQL to business-oriented data analysis. It demonstrates the ability to explore relational datasets, analyze sales trends, evaluate product and customer performance, apply segmentation techniques, and create reusable reporting views.
+
+The resulting analysis provides a foundation for understanding business performance and supporting data-driven decisions.
+
 
 ## Project Status
 
 **In Progress**
 
-This project is being developed as a hands-on SQL portfolio project to strengthen practical data exploration and analytical skills.
+The SQL-based sales analysis and reporting phase has been completed. Future development will focus on building an interactive dashboard using Power BI or Excel to visualize key performance indicators, sales trends, customer behavior, and product performance.
 
-Further analysis can include time-based sales trends, customer behavior analysis, product performance comparisons, and additional business insights supported by the query results.
+The project will be further enhanced with visual insights and business recommendations to provide a more complete view of sales performance and support data-driven decision-making.
 
 ## Author
 
